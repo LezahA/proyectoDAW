@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
   service: 'gmail', // Servicio de correo electrónico
   auth: {
     user: 'haz.azu.calderonbonilla@gmail.com', // Tu dirección de correo electrónico
-    pass: 'xxxx xxxx xxxx xxxx' // Token generado por Google
+    pass: 'lmkq shlc urjf rhxy' // Token generado por Google
   }
 });
 
