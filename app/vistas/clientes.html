@@ -6,20 +6,76 @@
     <title>Clientes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="shortcut icon" href="../recursos/img/logoUes.png" />
-
-</head>
-<body>
     <style>
-        .principal-div{
+        body {
+            background-color: #f8f9fa;
+        }
+        .principal-div {
             background-color: #A4C7CD;
         }
         .testimonial {
-            background-color: #f8f9fa;
+            background-color: #ffffff;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        .testimonial:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+        .testimonial:hover::after {
+            content: attr(data-date);
+            position: absolute;
+            bottom: -20px;
+            left: 20px;
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        .testimonial hr {
+            margin: 10px 0;
+        }
+        .testimonial p {
+            font-size: 1.1rem;
+            color: #333;
+        }
+        .testimonial footer {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            color: #006494;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .comment-form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+        .tooltip-inner {
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            padding: 5px;
+        }
+        .tooltip-arrow {
+            display: none;
         }
     </style>
+</head>
+<body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" data-bs-theme="dark">
         <div class="container">
           <a class="navbar-brand" href="#">Hospital UES</a>
@@ -50,49 +106,81 @@
     <script src="./header.js"></script>
     <br>
 
-  <div class="container my-5">
-    <h2 class="display-5">Testimonios de Nuestros Clientes</h2>
-    <br>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-      <div class="col">
-        <div class="testimonial">
-          <blockquote class="blockquote">
-            <hr class="border border-primary border-2 opacity-75">
-            <p>"La atención médica y el cuidado que recibí en este hospital fueron excepcionales. Recomiendo encarecidamente sus servicios."</p>
-            <br>
-            <footer class="blockquote-footer">Juan Pérez</footer>
-            <hr class="border border-primary border-2 opacity-75">
-          </blockquote>
+    <div class="container my-5">
+        <h2 class="section-title">Testimonios de Nuestros Clientes</h2>
+        
+        <div class="row row-cols-1 row-cols-md-3 g-4" id="testimonials"></div>
+
+        <!-- Formulario para nuevos comentarios -->
+        <div class="comment-form">
+            <h5>Agregar un Testimonio</h5>
+            <form id="commentForm">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Comentario</label>
+                    <textarea class="form-control" id="comment" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Publicar</button>
+            </form>
         </div>
-      </div>
-      <div class="col">
-        <div class="testimonial">
-          <blockquote class="blockquote">
-            <hr class="border border-primary border-2 opacity-75">
-            <p>"El personal fue amable y atento en todo momento. Me sentí seguro y bien cuidado durante mi estancia."</p>
-            <br>
-            <footer class="blockquote-footer">María García</footer>
-            <hr class="border border-primary border-2 opacity-75">
-          </blockquote>
-        </div>
-      </div>
-      <div class="col">
-        <div class="testimonial">
-          <blockquote class="blockquote">
-            <hr class="border border-primary border-2 opacity-75">
-            <p>"Las instalaciones son modernas y limpias. Tuve una experiencia muy positiva y recomendaría este hospital a cualquiera."</p>
-            <br>
-            <footer class="blockquote-footer">Carlos Rodríguez</footer>
-            <hr class="border border-primary border-2 opacity-75">
-          </blockquote>
-        </div>
-      </div>
     </div>
-  </div>
 
     <br>
     <script src="./footer.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLX1+LycD1Wf2+3m5TtWk4PpNPgGkr5UMfjlgD2xMhvlcZZHVGhW2syTkQfMo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <script>
+        // Load testimonials from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTestimonials();
+        });
+
+        document.getElementById('commentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const comment = document.getElementById('comment').value;
+            const date = new Date().toLocaleString();
+
+            if (name && comment) {
+                const testimonial = { name, comment, date };
+                saveTestimonial(testimonial);
+                addTestimonialToDOM(testimonial);
+
+                document.getElementById('commentForm').reset();
+            }
+        });
+
+        function saveTestimonial(testimonial) {
+            let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+            testimonials.push(testimonial);
+            localStorage.setItem('testimonials', JSON.stringify(testimonials));
+        }
+
+        function loadTestimonials() {
+            let testimonials = JSON.parse(localStorage.getItem('testimonials')) || [];
+            testimonials.forEach(addTestimonialToDOM);
+        }
+
+        function addTestimonialToDOM(testimonial) {
+            const newTestimonial = document.createElement('div');
+            newTestimonial.classList.add('col');
+            newTestimonial.innerHTML = `
+                <div class="testimonial" data-date="Publicado el: ${testimonial.date}">
+                    <blockquote class="blockquote">
+                        <hr class="border border-primary border-2 opacity-75">
+                        <p>"${testimonial.comment}"</p>
+                        <footer class="blockquote-footer">${testimonial.name}</footer>
+                        <hr class="border border-primary border-2 opacity-75">
+                    </blockquote>
+                </div>
+            `;
+
+            document.getElementById('testimonials').prepend(newTestimonial);
+        }
+    </script>
 </body>
 </html>
